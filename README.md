@@ -1,6 +1,5 @@
 # Auto-Compile By Liu Tianyou
 
-
 1. 配置项目
 
 通过修改项目下的ac.ini文件进行项目的配置，这样才能让自动编译器知道你的项目是什么样子的。
@@ -39,4 +38,5 @@ auto-compile # 编译
 3.特别鸣谢
 
 AMIRIOX無暝 感谢你给了我这个项目的思想
+
 忠诚的卫士 感谢你给我[INI文件解析的轮子](https://www.cnblogs.com/GuanghuiLiu/p/8832034.html)
