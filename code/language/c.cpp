@@ -1,4 +1,5 @@
 #include "language.hpp"
+#include "../functions/functions.hpp"
 
 class C : public objfile{
     public:
@@ -6,7 +7,7 @@ class C : public objfile{
         int optimize;
         std::vector<std::string> defines;
         std::vector<std::string> options;
-        void make(){
+        int make(){
             std::string object = name.substr(0, name.find("."));
             std::string cmd = "gcc ";
             if(standrand != NULLSTR){
@@ -22,6 +23,6 @@ class C : public objfile{
                 cmd+= v2s(options, "", " ");
             }
             cmd += "-o /tmp/" + object + ".o";
-            system(cmd.c_str());
+            return system(cmd.c_str());
         }
 };
