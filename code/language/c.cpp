@@ -23,6 +23,7 @@ class C : public objfile{
                 cmd+= v2s(options, "", " ");
             }
             cmd += "-o /tmp/" + object + ".o";
+            cout << cmd << endl;
             return system(cmd.c_str());
         }
 };

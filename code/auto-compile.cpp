@@ -58,6 +58,7 @@ int main(int argc, char** argv){
         link_cmd += v2s(options, "", " ");
         vector<string> libraries = s2v(iniparser_getstring(ini, "main:library", NULLSTR));
         link_cmd += v2s(libraries, "-l", " ");
+        cout << link_cmd << endl;
         if(!system(link_cmd.c_str())){
             iniparser_freedict(ini);
             return EXIT_FAILURE;
