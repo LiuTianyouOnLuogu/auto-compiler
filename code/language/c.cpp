@@ -1,5 +1,6 @@
 #include "language.hpp"
 #include "../functions/functions.hpp"
+#include <iostream>
 
 class C : public objfile{
     public:
@@ -23,7 +24,7 @@ class C : public objfile{
                 cmd+= v2s(options, "", " ");
             }
             cmd += "-o /tmp/" + object + ".o";
-            cout << cmd << endl;
+            std::cout << cmd << std::endl;
             return system(cmd.c_str());
         }
 };

@@ -12,7 +12,9 @@ s2v.o: code/functions/s2v.cpp
 	gcc code/functions/s2v.cpp -c -o s2v.o -std=c++11 -O3 -Wall
 v2s.o: code/functions/v2s.cpp
 	gcc code/functions/v2s.cpp -c -o v2s.o -std=c++11 -O3 -Wall
-.PHONY: clean
+.PHONY: clean install
+install:
+	ln -s auto-compile /usr/bin/auto-compile
 clean:
 	rm *.o
 	rm auto-compile
