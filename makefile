@@ -16,5 +16,5 @@ v2s.o: code/functions/v2s.cpp
 install:
 	ln -s auto-compile /usr/bin/auto-compile
 clean:
-	rm *.o
-	rm auto-compile
+	-rm *.o
+	-rm auto-compile

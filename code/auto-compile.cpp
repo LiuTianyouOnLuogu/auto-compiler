@@ -15,6 +15,7 @@ int main(int argc, char** argv){
     string filename = "ac.ini";
     dictionary* ini = NULL;
     string link_cmd = "ld ";
+    string objs = "";
     if(argc == 3 && !strcmp(argv[1], "--config")){
         filename = argv[2];
         goto start; //跳入正常的处理
@@ -22,14 +23,16 @@ int main(int argc, char** argv){
         return system("cat ../README.md");
     }else if(argc==1){
         start:;
-        iniparser_load(filename.c_str());
+        ini = iniparser_load(filename.c_str());
         if(ini == NULL){
             cerr << "Error: Can NOT read config file!" << endl;
             return EXIT_FAILURE;
         }
         for(int i = 0; i < iniparser_getnsec(ini); i++){
             string section = iniparser_getsecname(ini, i);
+            if(section == "main") continue;
             string lang = iniparser_getstring(ini, (section + ":language").c_str(), NULLSTR);
+            clog << "Compiling: " << section << endl;
             if(lang == NULLSTR){
                 NoLang: cerr << "Error: Can NOT read language what you use!" << endl;
                 iniparser_freedict(ini);
@@ -45,7 +48,9 @@ int main(int argc, char** argv){
                 obj.optimize = iniparser_getint(ini, (section + ":optimize").c_str(), NULLNUM);
                 obj.defines = s2v(iniparser_getstring(ini, (section + ":define").c_str(), NULLSTR));
                 obj.options = s2v(iniparser_getstring(ini, (section + ":options").c_str(), NULLSTR));
-                if(!obj.make()){
+                int status = obj.make(objs);
+                if(status != 0){
+                    cerr << "Return status: " << status << endl;
                     iniparser_freedict(ini);
                     return EXIT_FAILURE;
                 }
@@ -53,13 +58,17 @@ int main(int argc, char** argv){
                 goto NoLang; // 没有语言
             }
         }
-        link_cmd += (string("-o ") + iniparser_getstring(ini, "main:name", NULLSTR));
+        clog << "Compiling: main" << endl;
+        link_cmd += objs + " ";
+        link_cmd += (string("-o ") + iniparser_getstring(ini, "main:name", NULLSTR)) + " ";
         vector<string> options = s2v(iniparser_getstring(ini, "main:options", NULLSTR));
         link_cmd += v2s(options, "", " ");
         vector<string> libraries = s2v(iniparser_getstring(ini, "main:library", NULLSTR));
         link_cmd += v2s(libraries, "-l", " ");
         cout << link_cmd << endl;
-        if(!system(link_cmd.c_str())){
+        int status = system(link_cmd.c_str());
+        if(status != 0){
+            cerr << "Return status: " << status << endl;
             iniparser_freedict(ini);
             return EXIT_FAILURE;
         }

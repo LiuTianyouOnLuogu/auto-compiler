@@ -1,6 +1,7 @@
 #include "language.hpp"
 #include "../functions/functions.hpp"
 #include <iostream>
+#include <string>
 
 class C : public objfile{
     public:
@@ -8,14 +9,15 @@ class C : public objfile{
         int optimize;
         std::vector<std::string> defines;
         std::vector<std::string> options;
-        int make(){
+        int make(std::string& objs){
             std::string object = name.substr(0, name.find("."));
-            std::string cmd = "gcc ";
+            objs += "/tmp/" + object + ".o ";
+            std::string cmd = "gcc -c " + object + ".c ";
             if(standrand != NULLSTR){
-                cmd += ("-std=" + standrand);
+                cmd += ("-std=" + standrand + " ");
             }
             if(optimize != NULLNUM){
-                cmd += (std::string("-O") + (char)(optimize - '0'));
+                cmd += (std::string("-O") + (char)(optimize + '0') + " ");
             }
             if(!defines.empty()){
                 cmd += v2s(defines, "-D", " ");

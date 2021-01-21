@@ -10,7 +10,7 @@
 ```ini
 [main] ;这里定义了如何链接这个项目
 name = example ;项目名称（将输出为以该名称为名称的可执行文件）
-library = mysqlclient, c, m, stdc++ ;将链接libmysqlclient.so库, libc.so库,libm.so库（C++数学库）
+library = mysqlclient&c&m&stdc++ ;将链接libmysqlclient.so库, libc.so库,libm.so库（C++数学库）
 ;stdc++库可以使用GCC编译C++代码（后文会介绍）
 options = -warn-once ;指定运行ld时的其他命令行
 
@@ -18,7 +18,7 @@ options = -warn-once ;指定运行ld时的其他命令行
 language = c ;使用C编译器（gcc编译器） *必选*
 standrand = c11 ;语言标准
 optimize = 2 ;O2优化
-define = DEBUG, ONLINE_JUDGE ;定义宏
+define = DEBUG&ONLINE_JUDGE ;定义宏
 options = -g ;其他选项
 
 [example2.cpp] ;C++文件，需要链接stdc++库
