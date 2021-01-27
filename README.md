@@ -35,7 +35,15 @@ vim ac.ini # 编辑配置文件
 auto-compile # 编译
 ```
 
-3.特别鸣谢
+3. 如何添加新语言模块
+
+在language文件里，加入（语言）.cpp。
+
+在auto-compile.cpp的46行，include语言文件，然后加入该语言的特殊判断即可。
+
+后期我们会使用更简单的方式。
+
+4. 特别鸣谢
 
 AMIRIOX無暝 感谢你给了我这个项目的思想
 
