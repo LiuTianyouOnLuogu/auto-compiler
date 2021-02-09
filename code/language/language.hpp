@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#define NULLSTR (char*)"null"
+#define NULLSTR (char*)""
 #define NULLNUM -1
 
 class objfile{

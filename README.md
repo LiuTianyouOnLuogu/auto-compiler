@@ -12,14 +12,12 @@
 name = example ;项目名称（将输出为以该名称为名称的可执行文件）
 library = mysqlclient&c&m&stdc++ ;将链接libmysqlclient.so库, libc.so库,libm.so库（C++数学库）
 ;stdc++库可以使用GCC编译C++代码（后文会介绍）
-options = -warn-once ;指定运行ld时的其他命令行
 
 [example.c] ;源代码文件名称，用来生成一个目标文件
 language = c ;使用C编译器（gcc编译器） *必选*
 standrand = c11 ;语言标准
 optimize = 2 ;O2优化
-define = DEBUG&ONLINE_JUDGE ;定义宏
-options = -g ;其他选项
+options = g ;其他选项
 
 [example2.cpp] ;C++文件，需要链接stdc++库
 language = c ;使用GCC编译器编译C++

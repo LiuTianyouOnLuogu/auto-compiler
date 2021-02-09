@@ -46,8 +46,7 @@ int main(int argc, char** argv){
                 obj.language = lang;
                 obj.standrand = iniparser_getstring(ini, (section + ":standrand").c_str(), NULLSTR);
                 obj.optimize = iniparser_getint(ini, (section + ":optimize").c_str(), NULLNUM);
-                obj.defines = s2v(iniparser_getstring(ini, (section + ":define").c_str(), NULLSTR));
-                obj.options = s2v(iniparser_getstring(ini, (section + ":options").c_str(), NULLSTR));
+                obj.options = parser(iniparser_getstring(ini, (section + ":options").c_str(), NULLSTR), "-", " ");
                 int status = obj.make(objs);
                 if(status != 0){
                     cerr << "Return status: " << status << endl;
@@ -61,10 +60,7 @@ int main(int argc, char** argv){
         clog << "Compiling: main" << endl;
         link_cmd += objs + " ";
         link_cmd += (string("-o ") + iniparser_getstring(ini, "main:name", NULLSTR)) + " ";
-        vector<string> options = s2v(iniparser_getstring(ini, "main:options", NULLSTR));
-        link_cmd += v2s(options, "", " ");
-        vector<string> libraries = s2v(iniparser_getstring(ini, "main:library", NULLSTR));
-        link_cmd += v2s(libraries, "-l", " ");
+        link_cmd += parser(iniparser_getstring(ini, "main:library", NULLSTR), "-l", " ");
         cout << link_cmd << endl;
         int status = system(link_cmd.c_str());
         if(status != 0){
