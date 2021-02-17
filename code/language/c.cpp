@@ -8,9 +8,8 @@ class C : public objfile{
         std::string standrand;
         int optimize;
         std::string options;
-        int make(std::string& objs){
+        int make(){
             std::string object = name.substr(0, name.find("."));
-            objs += "/tmp/" + object + ".o ";
             std::string cmd = "gcc -c " + object + ".c ";
             if(standrand != NULLSTR){
                 cmd += ("-std=" + standrand + " ");
@@ -22,7 +21,7 @@ class C : public objfile{
                 cmd += options;
             }
             cmd += "-o /tmp/" + object + ".o";
-            //std::cout << cmd << std::endl;
+            std::cout << cmd << std::endl;
             return system(cmd.c_str());
         }
 };

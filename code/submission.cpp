@@ -27,7 +27,6 @@ int main(int argc, char** argv){
     //在这里判断语言类型 -------------------------
     #include "language/c.cpp" // 语言文件
     if(lang == "c" || lang == "C"){
-        string objs = "";
         C obj;
         obj.name = section;
         obj.language = lang;
@@ -35,7 +34,7 @@ int main(int argc, char** argv){
         obj.optimize = iniparser_getint(ini, (section + ":optimize").c_str(), NULLNUM);
         obj.options = parser(iniparser_getstring(ini, (section + ":options").c_str(), NULLSTR), "-", " ");
         cerr << "[" << getpid() << "] Compiling C file " << obj.name << "..." << endl;
-        int status = obj.make(objs);
+        int status = obj.make();
         if(status != 0){
             cerr << "[" << getpid() << "] " << "Return status: " << status << endl;
             iniparser_freedict(ini);

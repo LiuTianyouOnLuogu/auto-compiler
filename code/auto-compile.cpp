@@ -12,6 +12,7 @@ extern "C"{
 using namespace std;
 
 int main(int argc, char** argv){
+    string objs;
     string filename = "ac.ini";
     dictionary* ini = NULL;
     string link_cmd = "ld ";
@@ -32,7 +33,8 @@ int main(int argc, char** argv){
             return EXIT_FAILURE;
         }
         for(int i = 0; i < iniparser_getnsec(ini); i++){
-            if(iniparser_getsecname(ini, i) == "main") continue;
+            string name = iniparser_getsecname(ini, i);
+            if(name == "main") continue;
             string cmd;
             char buf[1024];
             sprintf(buf, "%d", i);
@@ -42,13 +44,14 @@ int main(int argc, char** argv){
             if(status != EXIT_SUCCESS){
                 return status;
             }
+            std::string object = name.substr(0, name.find("."));
+            objs += "/tmp/" + object + ".o ";
         }
-        string objs = "";
         clog << "Compiling: main" << endl;
         link_cmd += objs + " ";
         link_cmd += (string("-o ") + iniparser_getstring(ini, "main:name", NULLSTR)) + " ";
         link_cmd += parser(iniparser_getstring(ini, "main:library", NULLSTR), "-l", " ");
-        //cout << link_cmd << endl;
+        cout << link_cmd << endl;
         int status = system(link_cmd.c_str());
         if(status != 0){
             cerr << "Return status: " << status << endl;
