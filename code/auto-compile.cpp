@@ -39,6 +39,7 @@ int main(int argc, char** argv){
             char buf[1024];
             sprintf(buf, "%d", i);
             cmd = pwd + "submission " + filename + " " + buf;
+            clog << "Command: " << cmd << endl;
             clog << "Making a process: " ;
             int status = system(cmd.c_str());
             if(status != EXIT_SUCCESS){
@@ -47,7 +48,7 @@ int main(int argc, char** argv){
             std::string object = name.substr(0, name.find("."));
             objs += "/tmp/" + object + ".o ";
         }
-        clog << "Compiling: main" << endl;
+        clog << "Linking objects..." << endl;
         link_cmd += objs + " ";
         link_cmd += (string("-o ") + iniparser_getstring(ini, "main:name", NULLSTR)) + " ";
         link_cmd += parser(iniparser_getstring(ini, "main:library", NULLSTR), "-l", " ");
