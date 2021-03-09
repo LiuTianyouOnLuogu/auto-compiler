@@ -22,3 +22,4 @@ install:
 clean:
 	-rm *.o
 	-rm auto-compile
+	-rm submission

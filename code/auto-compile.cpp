@@ -32,8 +32,18 @@ void CE(int sig){
     exit(EXIT_FAILURE);
 }
 
+void subthread(const char* cmd, pid_t pid){
+    int status = system(cmd);
+    if(status != 0){
+        kill(pid, SIGUSR1); //如果失败，发送失败信号
+    }
+}
+
+int main_pid = 0; //主线程pid
+
 int main(int argc, char** argv){
     signal(SIGUSR1, CE);
+    main_pid = getpid();
     system("echo > error.log"); //清空日志
     string objs;
     string filename = "ac.ini";
@@ -63,13 +73,11 @@ int main(int argc, char** argv){
             char buf[1024], pid[1024];
             sprintf(buf, "%d", i);
             sprintf(pid, "%d", getpid());
-            cmd = pwd + "submission " + filename + " " + buf + " 2>> error.log || kill -SIGUSR1 " + pid;
+            cmd = pwd + "submission " + filename + " " + buf + " 2>> error.log";
             //clog << "Command: " << cmd << endl;
             clog << "Compiling  " + name + "..." << endl;
             threadPool.push_back(threadPlus(number++, 0));
-            threadPool.back().t = new thread([](const char* cmd){
-                system(cmd);
-            }, cmd.c_str());
+            threadPool.back().t = new thread(subthread, cmd.c_str(), main_pid);
             if(threadPool.back().t->joinable()) threadPool.back().t->detach(); //有时线程执行过快，无法脱离
             std::string object = name.substr(0, name.find("."));
             objs += "/tmp/" + object + ".o ";
@@ -83,10 +91,7 @@ int main(int argc, char** argv){
         link_cmd += (string("-o ") + iniparser_getstring(ini, "main:name", NULLSTR)) + " ";
         link_cmd += parser(iniparser_getstring(ini, "main:library", NULLSTR), "-l", " ");
         link_cmd += " 2>> error.log";
-        int status = system(link_cmd.c_str());
-        if(status != 0){
-            kill(getpid(), SIGUSR1);
-        }
+        subthread(link_cmd.c_str(), main_pid);
         remove("error.log");
         iniparser_freedict(ini);
         return EXIT_SUCCESS;
