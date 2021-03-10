@@ -28,7 +28,7 @@ list<threadPlus> threadPool;
 void CE(int sig){
     cerr << "An Unexpeted Error Happened." << endl;
     system("cat error.log");
-    remove("error.log");
+    if(!debug) remove("error.log");
     exit(EXIT_FAILURE);
 }
 
@@ -40,6 +40,7 @@ void subthread(const char* cmd, pid_t pid){
 }
 
 int main_pid = 0; //主线程pid
+bool debug = false; //debug标志
 
 int main(int argc, char** argv){
     signal(SIGUSR1, CE);
@@ -54,8 +55,8 @@ int main(int argc, char** argv){
     readlink("/proc/self/exe", buffer, 10240);
     string pwd = buffer;
     pwd = pwd.substr(0, pwd.length() - 12);
-    if(argc == 3 && !strcmp(argv[1], "--config")){
-        filename = argv[2];
+    if(argc == 2 && !strcmp(argv[1], "--debug")){
+        debug = true;
         goto start; //跳入正常的处理
     }else if(argc == 2 && !strcmp(argv[1], "--help")){
         return system("cat ../README.md");
@@ -92,7 +93,7 @@ int main(int argc, char** argv){
         link_cmd += parser(iniparser_getstring(ini, "main:library", NULLSTR), "-l", " ");
         link_cmd += " 2>> error.log";
         subthread(link_cmd.c_str(), main_pid);
-        remove("error.log");
+        if(!debug) remove("error.log");
         iniparser_freedict(ini);
         return EXIT_SUCCESS;
     }else{

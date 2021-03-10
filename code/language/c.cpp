@@ -21,7 +21,6 @@ class C : public objfile{
                 cmd += options;
             }
             cmd += "-o /tmp/" + object + ".o";
-            std::cout << cmd << std::endl;
             return system(cmd.c_str());
         }
 };
