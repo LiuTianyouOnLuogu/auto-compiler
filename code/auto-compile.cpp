@@ -28,13 +28,17 @@ list<threadPlus> threadPool;
 void CE(int sig){
     cerr << "An Unexpeted Error Happened." << endl;
     system("cat error.log");
-    if(!debug) remove("error.log");
     exit(EXIT_FAILURE);
 }
 
-void subthread(const char* cmd, pid_t pid){
-    int status = system(cmd);
+void subthread(const char* cmd, pid_t pid, bool t = false){
+    int test = 0;
+    start: int status = system(cmd);
     if(status != 0){
+        if(t){
+            test++;
+            if(status < 5) goto start;
+        }
         kill(pid, SIGUSR1); //如果失败，发送失败信号
     }
 }
@@ -76,14 +80,15 @@ int main(int argc, char** argv){
             sprintf(pid, "%d", getpid());
             cmd = pwd + "submission " + filename + " " + buf + " 2>> error.log";
             //clog << "Command: " << cmd << endl;
-            clog << "Compiling  " + name + "..." << endl;
             threadPool.push_back(threadPlus(number++, 0));
-            threadPool.back().t = new thread(subthread, cmd.c_str(), main_pid);
+            threadPool.back().t = new thread(subthread, cmd.c_str(), main_pid, false);
+            clog << "[" << threadPool.back().t->get_id() << "]" << "Compiling  " + name + "..." << endl;
             if(threadPool.back().t->joinable()) threadPool.back().t->detach(); //有时线程执行过快，无法脱离
             std::string object = name.substr(0, name.find("."));
             objs += "/tmp/" + object + ".o ";
         }
-        while(!threadPool.empty()){ //测试：多线程处理
+        while(true){ //测试：多线程处理
+            if(threadPool.empty()) break;
             if(threadPool.back().t->joinable()) threadPool.front().t->join(); //加入主线程
             threadPool.pop_front();
         }
@@ -92,7 +97,7 @@ int main(int argc, char** argv){
         link_cmd += (string("-o ") + iniparser_getstring(ini, "main:name", NULLSTR)) + " ";
         link_cmd += parser(iniparser_getstring(ini, "main:library", NULLSTR), "-l", " ");
         link_cmd += " 2>> error.log";
-        subthread(link_cmd.c_str(), main_pid);
+        subthread(link_cmd.c_str(), true);
         if(!debug) remove("error.log");
         iniparser_freedict(ini);
         return EXIT_SUCCESS;

@@ -1,6 +1,6 @@
-#include "header.h"
+#include <stdio.h>
 
 int main(){
-    helloworld();
+    printf("hello, world");
     return 0;
 }

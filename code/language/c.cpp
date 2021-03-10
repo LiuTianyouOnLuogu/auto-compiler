@@ -20,7 +20,7 @@ class C : public objfile{
             if(!options.empty()){
                 cmd += options;
             }
-            cmd += "-o /tmp/" + object + ".o";
+            cmd += "-o /tmp/" + object + ".o -static";
             return system(cmd.c_str());
         }
 };

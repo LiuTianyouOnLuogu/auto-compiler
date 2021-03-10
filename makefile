@@ -1,8 +1,7 @@
-Optmize = -Og -pthread -Wno-unused-result -Wall -g3 -Wno-format-overflow -Werror
+Optmize = -O0 -pthread -Wno-unused-result -Wall -g3 -Wno-format-overflow -Werror
 auto-compile: C.o auto-compile.o dictionary.o iniparser.o parser.o submission.o
 	gcc C.o auto-compile.o dictionary.o iniparser.o parser.o -o auto-compile -lstdc++ -pthread -g3
 	gcc C.o submission.o dictionary.o iniparser.o parser.o -o submission -lstdc++ -g3
-	-rm *.o
 submission.o: code/submission.cpp
 	gcc code/submission.cpp -c -o submission.o -std=c++17 $(Optmize) 
 C.o: code/language/C.cpp
