@@ -4,8 +4,6 @@
 
 通过修改项目下的ac.ini文件进行项目的配置，这样才能让自动编译器知道你的项目是什么样子的。
 
-指定ac.ini文件： --config ac.ini
-
 语法：
 ```ini
 [main] ;这里定义了如何链接这个项目
@@ -21,9 +19,20 @@ options = g ;其他选项
 
 [example2.cpp] ;C++文件，需要链接stdc++库
 language = c ;使用GCC编译器编译C++
+
+[step1]
+command = echo+hello+>+hello.log ;执行命令（并行执行）
+
+[step2]
+command = echo+foo+>+bar.log ;执行命令（串行执行）
+serial = true ;串行执行
 ```
 
-目前代码只支持C语言和C++语言，期待大佬改进。
+目前代码只支持C语言，期待大佬改进。
+
+程序执行顺序：
+
+![](https://cdn.luogu.com.cn/upload/image_hosting/apy2vfds.png)
 
 2. 编译项目
 
@@ -54,6 +63,10 @@ A: 一般最常见的就是“xxx未定义”和“xxx重复定义”的错误�
 争取把用不到的模板换成非模板，或者用另一种方法定义函数。
 
 当然，也有可能是你没有把相应的库链接好，这个时候，你应该添加需要的库。
+
+Q: 无法运行ELF文件，提示找不到？
+
+A: 参见Issue #2。
 
 Q: 工具有bug？
 
