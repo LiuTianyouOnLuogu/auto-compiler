@@ -5,7 +5,7 @@
         "bit": "cpp",
         "*.tcc": "cpp",
         "cctype": "cpp",
-        "clocale": "cpp",
+        "clocale": "cpp", 
         "cmath": "cpp",
         "cstdarg": "cpp",
         "cstddef": "cpp",
@@ -49,6 +49,5 @@
         "chrono": "cpp",
         "ctime": "cpp",
         "ratio": "cpp",
-        "header.h": "c"
     }
 }
